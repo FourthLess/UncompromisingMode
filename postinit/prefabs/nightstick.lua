@@ -3,26 +3,13 @@ GLOBAL.setfenv(1, GLOBAL)
 -----------------------------------------------------------------
 
 local function onlightningground(inst)
-    local percent = inst.components.fueled:GetPercent()
-    local refuelnumber = 0
-    if percent + 0.33 > 1 then
-        refuelnumber = 1
-    else
-        refuelnumber = percent + 0.33
+    inst.components.fueled:DoDelta(TUNING.MED_FUEL)
+    inst.components.fueled.ontakefuelfn(inst, TUNING.SMALL_FUEL)
+    if inst.components.fueled:GetPercent() > 1 then
+        inst.components.fueled:SetPercent(1)
     end
-    inst.components.fueled:SetPercent(refuelnumber)
 end
 
-local function Strike(owner)
-    local fx = SpawnPrefab("electrichitsparks")
-    --onlightningground(inst)
-    if owner ~= nil then
-        fx.entity:SetParent(owner.entity)
-        fx.entity:AddFollower()
-        fx.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -145, 0)
-        --fx.Transform:SetScale(.66, .66, .66)
-    end
-end
 
 local function onremovefire(fire)
     fire.nightstick._fire = nil
@@ -50,6 +37,27 @@ local function turnon(inst)
             inst:ListenForEvent("onremove", onremovefire, inst._fire)
         end
         inst._fire.entity:SetParent(owner.entity)
+    end
+end
+
+
+local function Strike(owner)
+    --onlightningground(inst)
+
+    if owner ~= nil then
+        local fx = SpawnPrefab("electrichitsparks")
+
+        fx.entity:SetParent(owner.entity)
+        fx.entity:AddFollower()
+        fx.Follower:FollowSymbol(owner.GUID, "swap_object", 0, -145, 0)
+        --fx.Transform:SetScale(.66, .66, .66)
+        local item = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HANDS)
+        item.components.fueled:DoDelta(TUNING.MED_FUEL)
+        item.components.fueled.ontakefuelfn(item, TUNING.SMALL_FUEL)
+        if item.components.fueled:GetPercent() > 1 then
+            item.components.fueled:SetPercent(1)
+        end
+
     end
 end
 
@@ -133,13 +141,12 @@ local function onequip(inst, owner)
         inst.components.burnable:Ignite()
         turnon(inst)
         owner.AnimState:OverrideSymbol("swap_object", "swap_nightstick", "swap_nightstick")
-        owner:AddTag("batteryuser") -- from batteryuser component
 
         if inst.overcharged then
             inst.sparktask = inst:DoTaskInTime(math.random(), spark)
         end
     end
-
+    owner:AddTag("batteryuser") -- from batteryuser component
     owner:AddTag("lightningrod")
     owner.lightningpriority = 0
     owner:ListenForEvent("lightningstrike", Strike, owner)
@@ -157,7 +164,7 @@ local function onunequip(inst, owner)
     owner.lightningpriority = nil
     owner:ListenForEvent("lightningstrike", nil)
 
-    if owner.components.upgrademoduleowner == nil then
+    if not owner.UM_isBatteryUser then
         local item = owner.components.inventory:GetEquippedItem(EQUIPSLOTS.HEAD)
         if item ~= nil then
             if not item:HasTag("electricaltool") and owner:HasTag("batteryuser") then

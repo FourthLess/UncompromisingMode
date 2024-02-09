@@ -17,7 +17,7 @@ STRINGS.UNCOMP_TOOLTIP = {
 	TOPHAT = "- Reduces sanity loss from various magic items.",
 	MOONDIAL = "- Fills watering cans.\n- When socketed with a Moon Tear, mutates offered items under the light of the full \"Moon\".",
 	ARMORDRAGONFLY = "- Summons mini Lavae allies when worn.",
-	GLASSCUTTER = "- Deals slightly more damage to Shadows.",
+	GLASSCUTTER = "- Deals more damage to Shadow Aligned Creatures.",
 	FEATHERHAT = "- Provides safety from territorial Pengulls.",
 	YELLOWAMULET = "- No longer breaks when empty.",
 	ORANGEAMULET = "- No longer breaks when empty.\n- Will pick certain plants too!",
@@ -26,7 +26,7 @@ STRINGS.UNCOMP_TOOLTIP = {
 	PREMIUMWATERINGCAN = "- Can contain and preserve ocean fish.",
 	RAINHAT = "- Slightly increased rain protection.",
 	ARMORMARBLE = "- Prevents knockback effects.",
-	TURF_DRAGONFLY = "- Prevents snowpile build-up.",
+	TURF_DRAGONFLY = "- Prevents snowpile build-up.\n- Speeds up player movement.",
 	BLOWDART_YELLOW = "- Stuns certain mechanical enemies.",
 	DRAGONFLYCHEST = "- Has even more item slots.\n- May hurt would be thieves.",
 	WARDROBE = "- Can store a lot of equipment.",
@@ -40,7 +40,6 @@ STRINGS.UNCOMP_TOOLTIP = {
 	MULTITOOL_AXE_PICKAXE = "- Creates shockwaves when chopping/mining.",
 	FEATHERPENCIL = "- Can rename Telelocator Focus' location name and Backtrek Watches.",
 	BOAT_ROTATOR_KIT = "- Increases boat steering speed.\n- Helps doing sharp turns.",
-	STAFF_TORNADO = "- Can redirect Giant Tornadoes.",
 	BLOWDART_FIRE = "- Now with EXTRA fire.\n- If already flaming when shot, the target explodes!",
 	BEEMINE = "- Now has 5 uses.\n- Spawns faster, more fragile bees.",
 	WALL_DREADSTONE_ITEM = "- Slowly repairs itself at the cost of sanity.",
@@ -292,4 +291,9 @@ end
 
 if TUNING.DSTU.DISABLE_MEGAFLARE then
 	TOOLTIPS.MEGAFLARE = "- No longer summons Deerclops."
+end
+
+if TUNING.DSTU.STORMS then
+	TOOLTIPS.BOOK_RAIN = "- Can briefly redirect Giant Tornadoes when in its range."
+	TOOLTIPS.STAFF_TORNADO = "- Can briefly redirect Giant Tornadoes."
 end
